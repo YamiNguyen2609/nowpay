@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">nowpay</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">aB7uiI3j4ZimTMVmz_WfxmfdO3D2x-TNHjbqu</string>
+</resources>
