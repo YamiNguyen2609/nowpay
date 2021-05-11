@@ -22,7 +22,7 @@ export default class Item extends Component {
     return (
       <TouchableOpacity
         style={styles.container}
-        onPress={() => this.props.onPressSubscribe(device)}>
+        onPress={() => this.props.onPressSubscribe(device, this.props.index)}>
         <View style={styles.containerInfo}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <AppText

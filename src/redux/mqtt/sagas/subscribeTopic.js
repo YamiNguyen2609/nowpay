@@ -14,7 +14,7 @@ function* subscribeTopic(action) {
 
     switch (state) {
       case 0:
-        yield getStatus(deviceId);
+        yield getStatus(deviceId, data);
         break;
 
       case 1:
@@ -31,7 +31,7 @@ function* subscribeTopic(action) {
   } catch (error) {}
 }
 
-function* getStatus(deviceId) {
+function* getStatus(deviceId, data) {
   let topic = '/boxctlevn/' + deviceId + '/status';
 
   var client = yield mqtt.onConnect({
@@ -51,9 +51,10 @@ function* getStatus(deviceId) {
     store.dispatch(
       onSuccess({
         type: 0,
+        index: data,
         data: {
           state: true,
-          device: deviceId,
+          device: data,
         },
       }),
     );
@@ -64,9 +65,11 @@ function* getStatus(deviceId) {
 }
 
 function* getControl(deviceId, data) {
-  console.log(deviceId, data);
-
   topic = '/boxctlevn/' + deviceId + '/control';
+
+  let hex = '0x000000' + parseInt(data['value'], 2).toString(16).toUpperCase();
+
+  console.log(data['value']);
 
   var client = yield mqtt.onConnect({
     clientId: deviceId,
@@ -75,37 +78,35 @@ function* getControl(deviceId, data) {
 
   client.connect();
 
-  console.log('topic', topic);
-
   client.on('connect', () => {
+    client.connect();
     console.log('you are connected!!!!');
     client.subscribe(topic, 0);
 
-    // data['value'] = '0x00000002';
-
-    let index = data['index'];
-
-    let state = data['state'];
-
-    delete data['index'];
-    delete data['state'];
-
-    client.publish(topic, JSON.stringify(data), 0, false);
-
-    store.dispatch(
-      onSuccess({
-        type: 1,
-        index,
-        data: {
-          state: !state,
-          device: deviceId,
-        },
+    client.publish(
+      topic,
+      JSON.stringify({
+        request: 300,
+        value: hex,
       }),
+      0,
+      false,
     );
 
     client.unsubscribe(topic);
 
     client.disconnect();
+
+    store.dispatch(
+      onSuccess({
+        type: 1,
+        index: data['index'],
+        data: {
+          state: !data['state'],
+          device: data['index'],
+        },
+      }),
+    );
   });
 }
 

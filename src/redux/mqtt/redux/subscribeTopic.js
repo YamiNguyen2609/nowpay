@@ -36,8 +36,6 @@ export default (state = initialState, action) => {
     case ACTION_SUCCESS:
       const {type, data, index} = action['payload'];
 
-      console.log('vo ne dadasdas', action);
-
       if (type == 0) {
         state['flag'] += 1;
         if (
@@ -51,12 +49,7 @@ export default (state = initialState, action) => {
             },
           ]);
       } else if (type == 1) {
-        console.log('state1', state['items'][index]);
-        state['items'][index] = {
-          id: index,
-          device: data['device'],
-          state: data['state'],
-        };
+        state['items'][index]['state'] = data['state'];
       }
 
       return {...state};

@@ -73,14 +73,14 @@ const schedule = {
       address: '130 Nguyễn Tri Phuơng',
       device: 'BCDDC2C44158',
     },
-    {
-      customerId: 'PE0032396',
-      timeStart: '2021-05-03T15:45:00',
-      timeEnd: '2021-05-03T16:10:00',
-      amount: '1050000',
-      address: '140 Nguyễn Tri Phuơng',
-      device: 'BCDDC2C44158',
-    },
+    // {
+    //   customerId: 'PE0032396',
+    //   timeStart: '2021-05-03T15:45:00',
+    //   timeEnd: '2021-05-03T16:10:00',
+    //   amount: '1050000',
+    //   address: '140 Nguyễn Tri Phuơng',
+    //   device: 'BCDDC2C44158',
+    // },
   ],
 };
 

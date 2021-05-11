@@ -7,4 +7,8 @@ const formatCurrency = (value, character = '.') => {
         .replace(/\B(?=(\d{3})+(?!\d))/g, character);
 };
 
-export {formatCurrency};
+const convertHex = (value) => {
+  return (value + 0x10000).toString(16).substr(-2).toUpperCase();
+};
+
+export {formatCurrency, convertHex};

@@ -42,6 +42,8 @@ export default class Render extends Component {
     ].concat(Data.countries.response),
     flagDevice: 0,
     isActionForm: false,
+    index: 0,
+    deviceId: '',
     device: {
       state: false,
       device: '',
@@ -51,9 +53,7 @@ export default class Render extends Component {
 
   UNSAFE_componentWillReceiveProps = (nextProps) => {
     if (this.props.flagDevice != nextProps.flagTopic) {
-      let device = nextProps.items.find(
-        (x) => x.device == this.state.titlePopup,
-      );
+      let device = nextProps.items.find((x) => x.device == this.state.index);
       this.setState({
         flagDevice: nextProps.flagDevice,
         isActionForm: true,
@@ -65,9 +65,9 @@ export default class Render extends Component {
   onPressSelect = (titlePopup, type) =>
     this.setState({isPopup: true, titlePopup, type});
 
-  onPressSubscribe = (item) =>
-    this.setState({titlePopup: item, deviceId: item}, () =>
-      this.props.subscribeTopic(item, 0),
+  onPressSubscribe = (item, index) =>
+    this.setState({titlePopup: item, deviceId: item, index}, () =>
+      this.props.subscribeTopic(item, 0, index),
     );
 
   render() {
@@ -195,11 +195,17 @@ export default class Render extends Component {
           visible={this.state.isActionForm}
           onPress={() =>
             this.setState({isActionForm: false, titlePopup: ''}, () =>
-              this.props.subscribeTopic(this.state.device.device, 1, {
+              this.props.subscribeTopic(this.state.deviceId, 1, {
                 index: this.state.device.id,
                 state: this.state.device.state,
                 request: '300',
-                value: this.state.device.state ? '0x000000AE' : '0x000000AB',
+                value: Data.schedule.response
+                  .map((item, index) => {
+                    var data = this.props.items.find((x) => x.device == index);
+                    if (data != null) return data.state ? 1 : 0;
+                    else return 0;
+                  })
+                  .join(''),
               }),
             )
           }
