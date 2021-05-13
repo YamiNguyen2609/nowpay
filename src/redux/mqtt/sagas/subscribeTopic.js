@@ -69,7 +69,7 @@ function* getControl(deviceId, data) {
 
   let hex = '0x000000' + parseInt(data['value'], 2).toString(16).toUpperCase();
 
-  console.log(data['value']);
+  console.log(data['index'], data['value']);
 
   var client = yield mqtt.onConnect({
     clientId: deviceId,

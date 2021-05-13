@@ -97,6 +97,8 @@ export default class Render extends Component {
         break;
     }
 
+    console.log('index', this.state.index);
+
     return (
       <View style={Styles.container}>
         <Header back={this.props.back} />
@@ -202,7 +204,9 @@ export default class Render extends Component {
                 value: Data.schedule.response
                   .map((item, index) => {
                     var data = this.props.items.find((x) => x.device == index);
-                    if (data != null) return data.state ? 1 : 0;
+                    if (data != null)
+                      if (index == this.state.index) return data.state ? 0 : 1;
+                      else return data.state ? 1 : 0;
                     else return 0;
                   })
                   .join(''),
