@@ -5,6 +5,25 @@ import {store} from '../../ConfigureStore';
 import mqtt from './connect';
 import {ACTION, onSuccess, onFailure} from '../redux/subscribeTopic';
 
+const bit = {
+  '0000': '0',
+  '0001': '1',
+  '0010': '2',
+  '0011': '3',
+  '0100': '4',
+  '0101': '5',
+  '0110': '6',
+  '0111': '7',
+  1000: '8',
+  1001: '9',
+  1010: 'A',
+  1011: 'B',
+  1100: 'C',
+  1101: 'D',
+  1110: 'E',
+  1111: 'F',
+};
+
 function* subscribeTopic(action) {
   try {
     const {state, deviceId, data} = action;
@@ -53,7 +72,7 @@ function* getStatus(deviceId, data) {
         type: 0,
         index: data,
         data: {
-          state: true,
+          state: false,
           device: data,
         },
       }),
@@ -67,9 +86,20 @@ function* getStatus(deviceId, data) {
 function* getControl(deviceId, data) {
   topic = '/boxctlevn/' + deviceId + '/control';
 
-  let hex = '0x000000' + parseInt(data['value'], 2).toString(16).toUpperCase();
+  let hexPrase = '';
 
-  console.log(data['index'], data['value']);
+  console.log(
+    'hexPrase1',
+    data['value'],
+    String(data['value'].substring(3, 4)),
+  );
+
+  for (let index = 0; index < data['value'].length; index += 4) {
+    console.log(index, data['value'].substring(index, index + 4));
+    hexPrase += bit[data['value'].substring(index, index + 4)];
+  }
+
+  let hex = '0x000000' + hexPrase;
 
   var client = yield mqtt.onConnect({
     clientId: deviceId,
@@ -88,6 +118,7 @@ function* getControl(deviceId, data) {
       JSON.stringify({
         request: 300,
         value: hex,
+        bit: data['value'],
       }),
       0,
       false,
