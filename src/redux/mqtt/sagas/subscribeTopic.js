@@ -6,22 +6,22 @@ import mqtt from './connect';
 import {ACTION, onSuccess, onFailure} from '../redux/subscribeTopic';
 
 const bit = {
-  '0000': '0',
-  '0001': '1',
-  '0010': '2',
-  '0011': '3',
-  '0100': '4',
-  '0101': '5',
-  '0110': '6',
-  '0111': '7',
-  1000: '8',
-  1001: '9',
-  1010: 'A',
-  1011: 'B',
-  1100: 'C',
-  1101: 'D',
-  1110: 'E',
-  1111: 'F',
+  0: '0',
+  1: '1',
+  2: '2',
+  3: '3',
+  4: '4',
+  5: '5',
+  6: '6',
+  7: '7',
+  8: '8',
+  9: '9',
+  10: 'A',
+  11: 'B',
+  12: 'C',
+  13: 'D',
+  14: 'E',
+  15: 'F',
 };
 
 function* subscribeTopic(action) {
@@ -88,18 +88,19 @@ function* getControl(deviceId, data) {
 
   let hexPrase = '';
 
-  console.log(
-    'hexPrase1',
-    data['value'],
-    String(data['value'].substring(3, 4)),
-  );
-
   for (let index = 0; index < data['value'].length; index += 4) {
-    console.log(index, data['value'].substring(index, index + 4));
-    hexPrase += bit[data['value'].substring(index, index + 4)];
+    let value =
+      Math.pow(2, 0) * data['value'][index] +
+      Math.pow(2, 1) * data['value'][index + 1] +
+      Math.pow(2, 2) * data['value'][index + 2] +
+      Math.pow(2, 3) * data['value'][index + 3];
+
+    hexPrase += bit[value];
   }
 
   let hex = '0x000000' + hexPrase;
+
+  console.log('hexPrase', data['value'], hexPrase);
 
   var client = yield mqtt.onConnect({
     clientId: deviceId,
@@ -113,16 +114,7 @@ function* getControl(deviceId, data) {
     console.log('you are connected!!!!');
     client.subscribe(topic, 0);
 
-    client.publish(
-      topic,
-      JSON.stringify({
-        request: 300,
-        value: hex,
-        bit: data['value'],
-      }),
-      0,
-      false,
-    );
+    client.publish(topic, '{"request": 300,"value": "' + hex + '"}', 0, false);
 
     client.unsubscribe(topic);
 
