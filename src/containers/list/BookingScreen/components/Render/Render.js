@@ -52,10 +52,10 @@ export default class Render extends Component {
   };
 
   UNSAFE_componentWillReceiveProps = (nextProps) => {
-    if (this.props.flagDevice != nextProps.flagTopic) {
+    if (this.state.flagDevice != nextProps.flagTopic) {
       let device = nextProps.items.find((x) => x.device == this.state.index);
       this.setState({
-        flagDevice: nextProps.flagDevice,
+        flagDevice: nextProps.flagTopic,
         isActionForm: true,
         device,
       });
@@ -96,8 +96,6 @@ export default class Render extends Component {
         day = 'Chủ nhật';
         break;
     }
-
-    console.log('index', this.state.index);
 
     return (
       <View style={Styles.container}>
@@ -167,7 +165,11 @@ export default class Render extends Component {
           showsVerticalScrollIndicator={false}
           data={Data.schedule.response}
           renderItem={(item) => (
-            <Item {...item} onPressSubscribe={this.onPressSubscribe} />
+            <Item
+              {...item}
+              onPressSubscribe={this.onPressSubscribe}
+              states={this.props.items}
+            />
           )}
           ItemSeparatorComponent={() => (
             <AppDivider height={10} color={Colors.appLightGrayColor} />

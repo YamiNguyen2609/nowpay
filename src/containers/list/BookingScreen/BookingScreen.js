@@ -14,6 +14,7 @@ export class BookingScreen extends Component {
 const mapStateToProp = (state) => ({
   flagTopic: state.subscribeTopic.flag,
   items: state.subscribeTopic.items,
+  flagUpdate: state.subscribeTopic.flagUpdate,
 });
 
 const mapDispatchToProp = {

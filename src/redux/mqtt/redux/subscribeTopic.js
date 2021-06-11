@@ -23,6 +23,7 @@ export {ACTION, subscribeTopic, onSuccess, onFailure};
 
 const initialState = {
   flag: 0,
+  flagUpdate: 0,
   value: '',
   state: 0,
   items: [],
@@ -35,7 +36,7 @@ export default (state = initialState, action) => {
 
     case ACTION_SUCCESS:
       const {type, data, index} = action['payload'];
-
+      state['flagUpdate'] += 1;
       if (type == 0) {
         state['flag'] += 1;
         if (

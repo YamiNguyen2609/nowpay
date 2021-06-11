@@ -11,14 +11,14 @@ import {formatCurrency} from '../../../../../helpers/Utils';
 export default class Item extends Component {
   state = {};
   render() {
-    const {
-      customerId,
-      timeStart,
-      timeEnd,
-      amount,
-      address,
-      device,
-    } = this.props.item;
+    const {states, index, item} = this.props;
+
+    const {customerId, timeStart, timeEnd, amount, address, device} = item;
+
+    let state = 0;
+    let data = states.find((x) => x.device == index);
+    if (data != null) state = data.state;
+
     return (
       <TouchableOpacity
         style={styles.container}
@@ -48,6 +48,13 @@ export default class Item extends Component {
             text={address}
             bold={true}
             size={Fonts.size.large}
+          />
+          <AppText
+            lines={1}
+            style={{width: '100%', marginTop: Metrics.margin.small}}
+            text={state ? 'Đang mở' : 'Đã tắt'}
+            size={Fonts.size.large}
+            color={state ? Colors.appGreen : Colors.appRed}
           />
         </View>
         <View>
